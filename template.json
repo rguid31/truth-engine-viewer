@@ -1,15 +1,15 @@
 {
     "name": "Truth Engine Portfolio",
     "description": "A premium professional portfolio mirrored from your Truth Engine dataset.",
-    "framework": "nextjs",
+    "framework": "other",
     "env": [
         {
-            "key": "NEXT_PUBLIC_TRUTH_ENGINE_HANDLE",
+            "key": "VITE_TRUTH_ENGINE_HANDLE",
             "description": "Your Truth Engine handle (e.g. yourname)",
             "link": "https://ryanguidry.com/dashboard"
         },
         {
-            "key": "NEXT_PUBLIC_TRUTH_ENGINE_API_URL",
+            "key": "VITE_TRUTH_ENGINE_API_URL",
             "description": "The base URL of the Truth Engine platform",
             "link": "https://ryanguidry.com"
         }
