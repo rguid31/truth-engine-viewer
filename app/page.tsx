@@ -50,7 +50,7 @@ export default async function Page() {
             <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
                 <h1 className="text-2xl font-bold mb-4">Profile Unavailable</h1>
                 <p className="text-red-500 max-w-md">
-                    Could not load profile data. Please ensure <code>NEXT_PUBLIC_PROFILE_URL</code> is set correctly in your Vercel project settings.
+                    Could not load profile data. Please ensure <code>NEXT_PUBLIC_TRUTH_ENGINE_HANDLE</code> is set correctly in your Vercel project settings.
                 </p>
             </div>
         );
