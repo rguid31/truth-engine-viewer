@@ -69,27 +69,48 @@
 
     <script>
         async function mirror() {
-            // EXPERT: We use a simple window variable check or a fetch fallback
-            const handle = "VITE_PREFILL_HANDLE" || window.TRUE_HANDLE;
-            const apiBase = "https://ryanguidry.com";
+            // Priority 1: Injected handle (from Headless Deploy)
+            let handle = "VITE_PREFILL_HANDLE";
 
-            // If VITE_PREFILL_HANDLE is used by our dashboard, we replace it
-            // Otherwise we try to detect the handle from the URL or meta
+            // Priority 2: Subdomain detection (e.g. ryan.vercel.app -> ryan)
+            if (handle.includes("VITE_PREFILL")) {
+                const hostname = window.location.hostname;
+                if (hostname.includes(".vercel.app") || hostname.includes(".github.io")) {
+                    handle = hostname.split('.')[0];
+                }
+            }
+
+            // Priority 3: URL ParameterFallback (?h=ryan)
             const urlParams = new URLSearchParams(window.location.search);
-            const finalHandle = urlParams.get('h') || handle;
+            handle = urlParams.get('h') || handle;
 
-            if (!finalHandle || finalHandle.includes("VITE_PREFILL")) {
-                showError("No handle detected. Please set TRUE_HANDLE in your Vercel Environment Variables.");
+            // API Base: Detect local vs production
+            const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? "http://localhost:3000"
+                : "https://ryanguidry.com";
+
+            if (!handle || handle.includes("VITE_PREFILL")) {
+                showError("No handle detected. Use the 'One-Click Deploy' from the Truth Engine dashboard.");
                 return;
             }
 
             try {
-                const res = await fetch(`${apiBase}/api/u/${finalHandle}/json`);
-                if (!res.ok) throw new Error(`Status ${res.status}`);
+                console.log(`[Mirror] Fetching ${handle} from ${apiBase}`);
+                const res = await fetch(`${apiBase}/api/u/${handle}/json`, {
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
+
+                if (!res.ok) {
+                    if (res.status === 404) throw new Error(`Profile "@${handle}" is not published yet.`);
+                    throw new Error(`Cloud API returned ${res.status}`);
+                }
+
                 const data = await res.json();
                 render(data);
             } catch (e) {
-                showError("Failed to reach Truth Engine API: " + e.message);
+                showError(`Mirror Sync Failed: ${e.message}`);
+                console.error(e);
             }
         }
 
@@ -165,7 +186,7 @@
                                     <p class="text-slate-400 leading-relaxed mb-8">${pr.description}</p>
                                     <div class="flex justify-between items-center">
                                        <div class="flex gap-2">
-                                         ${pr.tech?.slice(0,2).map(t => `<span class="text-[10px] bg-slate-800 px-2 py-1 rounded-lg font-bold">${t}</span>`).join('')}
+                                         ${pr.tech?.slice(0, 2).map(t => `<span class="text-[10px] bg-slate-800 px-2 py-1 rounded-lg font-bold">${t}</span>`).join('')}
                                        </div>
                                        ${pr.url ? `<a href="${pr.url}" class="text-indigo-500 font-bold text-sm">Case Study ›</a>` : ''}
                                     </div>
