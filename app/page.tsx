@@ -4,27 +4,27 @@ import type { Metadata } from 'next';
 import type { PublicProfile } from '../lib/types';
 
 // Fetch data from the external Truth Engine dataset
-// Fetch data from the external Truth Engine dataset
 async function getProfile(): Promise<PublicProfile | null> {
     const handle = process.env.NEXT_PUBLIC_TRUTH_ENGINE_HANDLE;
     const apiBase = process.env.NEXT_PUBLIC_TRUTH_ENGINE_API_URL || 'https://ryanguidry.com';
 
     if (!handle) {
-        console.error('Error: NEXT_PUBLIC_TRUTH_ENGINE_HANDLE environment variable is not set.');
+        console.warn('NOTE: NEXT_PUBLIC_TRUTH_ENGINE_HANDLE is not set. View will show setup instructions.');
         return null;
     }
 
     const url = `${apiBase}/api/u/${handle}/json`;
 
     try {
+        console.log(`[Viewer] Mirroring architecture from: ${url}`);
         const res = await fetch(url, { next: { revalidate: 60 } });
         if (!res.ok) {
-            console.error(`Failed to fetch profile from ${url}: ${res.status} ${res.statusText}`);
+            console.error(`[Viewer] API failure: ${res.status} ${res.statusText}`);
             return null;
         }
         return res.json();
     } catch (e) {
-        console.error('Error fetching profile:', e);
+        console.error('[Viewer] Network error during mirroring:', e);
         return null;
     }
 }
