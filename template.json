@@ -1,17 +1,12 @@
 {
     "name": "Truth Engine Portfolio",
-    "description": "A premium professional portfolio mirrored from your Truth Engine dataset.",
+    "description": "A zero-build instant mirror of your professional Truth Engine dataset.",
     "framework": "other",
     "env": [
         {
-            "key": "VITE_TRUTH_ENGINE_HANDLE",
-            "description": "Your Truth Engine handle (e.g. yourname)",
-            "link": "https://ryanguidry.com/dashboard"
-        },
-        {
-            "key": "VITE_TRUTH_ENGINE_API_URL",
-            "description": "The base URL of the Truth Engine platform",
-            "link": "https://ryanguidry.com"
+            "key": "TRUE_HANDLE",
+            "description": "Your handle from ryanguidry.com",
+            "required": true
         }
     ]
 }
