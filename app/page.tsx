@@ -289,16 +289,17 @@ export default async function Page() {
                     </section>
                 )}
 
-                {/* Footer */}
+                {/* Footer with data links */}
                 <footer className="border-t border-gray-200 dark:border-gray-800 pt-8 mt-16 text-center text-sm text-gray-500 dark:text-gray-500">
                     <p className="mb-2">
                         Last updated {new Date(profile.lastUpdated || Date.now()).toLocaleDateString()}
                     </p>
-                    <p className="sr-only">
-                        Version {profile.versionId} · Content Hash {profile.contentHash}
-                    </p>
-                    <p className="mt-4 text-xs opacity-50">
-                        Powered by Truth Engine
+                    <div className="flex justify-center gap-4 mb-4">
+                        <a href={`${process.env.NEXT_PUBLIC_TRUTH_ENGINE_API_URL || 'https://ryanguidry.com'}/u/${profile.handle}.json`} className="hover:text-blue-600 transition tracking-tighter font-mono text-[10px]">📄 JSON</a>
+                        <a href={`${process.env.NEXT_PUBLIC_TRUTH_ENGINE_API_URL || 'https://ryanguidry.com'}/u/${profile.handle}.jsonld`} className="hover:text-blue-600 transition tracking-tighter font-mono text-[10px]">🔗 JSON-LD</a>
+                    </div>
+                    <p className="mt-4 text-xs">
+                        Powered by <a href="https://ryanguidry.com" className="text-blue-600 hover:underline font-semibold">Truth Engine</a>
                     </p>
                 </footer>
             </div>
