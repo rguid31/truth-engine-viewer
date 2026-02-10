@@ -4,17 +4,22 @@ import type { Metadata } from 'next';
 import type { PublicProfile } from '../lib/types';
 
 // Fetch data from the external Truth Engine dataset
+// Fetch data from the external Truth Engine dataset
 async function getProfile(): Promise<PublicProfile | null> {
-    const url = process.env.NEXT_PUBLIC_PROFILE_URL;
-    if (!url) {
-        console.error('Error: NEXT_PUBLIC_PROFILE_URL environment variable is not set.');
+    const handle = process.env.NEXT_PUBLIC_TRUTH_ENGINE_HANDLE;
+    const apiBase = process.env.NEXT_PUBLIC_TRUTH_ENGINE_API_URL || 'https://ryanguidry.com';
+
+    if (!handle) {
+        console.error('Error: NEXT_PUBLIC_TRUTH_ENGINE_HANDLE environment variable is not set.');
         return null;
     }
+
+    const url = `${apiBase}/api/u/${handle}/json`;
 
     try {
         const res = await fetch(url, { next: { revalidate: 60 } });
         if (!res.ok) {
-            console.error(`Failed to fetch profile: ${res.status} ${res.statusText}`);
+            console.error(`Failed to fetch profile from ${url}: ${res.status} ${res.statusText}`);
             return null;
         }
         return res.json();
