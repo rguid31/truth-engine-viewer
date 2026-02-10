@@ -3,7 +3,9 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import type { PublicProfile } from '../lib/types';
 
-// Fetch data from the external Truth Engine dataset
+// FORCE DYNAMIC: This prevents Vercel from trying to fetch data during the build step.
+export const dynamic = 'force-dynamic';
+
 async function getProfile(): Promise<PublicProfile | null> {
     const handle = process.env.NEXT_PUBLIC_TRUTH_ENGINE_HANDLE;
     const apiBase = process.env.NEXT_PUBLIC_TRUTH_ENGINE_API_URL || 'https://ryanguidry.com';
